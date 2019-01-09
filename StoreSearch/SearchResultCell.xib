@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchResultCell" id="IIa-P8-AQr" customClass="SearchResultCell" customModule="StoreSearch" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IIa-P8-AQr" id="FeK-wA-U0U">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKj-RO-Lf3">
+                        <rect key="frame" x="90" y="44" width="279" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="eaM-12-h46">
+                        <rect key="frame" x="15" y="10" width="60" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="61D-Jq-eWr"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="MGx-AQ-12D"/>
+                            <constraint firstAttribute="height" constant="60" id="i7q-4e-eKB"/>
+                            <constraint firstAttribute="width" constant="60" id="sOG-89-Rva"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4A0-Rw-A3e">
+                        <rect key="frame" x="90" y="15" width="279" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="4A0-Rw-A3e" secondAttribute="trailing" constant="6" id="6Kx-7F-YJM"/>
+                    <constraint firstItem="vKj-RO-Lf3" firstAttribute="top" secondItem="4A0-Rw-A3e" secondAttribute="bottom" constant="7" id="9ZG-2v-kWl"/>
+                    <constraint firstItem="eaM-12-h46" firstAttribute="top" secondItem="FeK-wA-U0U" secondAttribute="top" constant="10" id="BrG-oU-Czt"/>
+                    <constraint firstAttribute="trailing" secondItem="vKj-RO-Lf3" secondAttribute="trailing" constant="6" id="Oxb-S0-N0d"/>
+                    <constraint firstItem="vKj-RO-Lf3" firstAttribute="leading" secondItem="eaM-12-h46" secondAttribute="trailing" constant="15" id="VDP-II-11E"/>
+                    <constraint firstItem="4A0-Rw-A3e" firstAttribute="leading" secondItem="eaM-12-h46" secondAttribute="trailing" constant="15" id="hH6-O4-maE"/>
+                    <constraint firstItem="eaM-12-h46" firstAttribute="leading" secondItem="FeK-wA-U0U" secondAttribute="leading" constant="15" id="pBR-DW-G8t"/>
+                    <constraint firstItem="4A0-Rw-A3e" firstAttribute="top" secondItem="FeK-wA-U0U" secondAttribute="top" constant="15" id="wbV-mb-XMx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="artistNameLabel" destination="vKj-RO-Lf3" id="dcl-3y-Ejy"/>
+                <outlet property="artworkImageView" destination="eaM-12-h46" id="4mG-SN-fkr"/>
+                <outlet property="nameLabel" destination="4A0-Rw-A3e" id="Dfm-SJ-nqn"/>
+            </connections>
+            <point key="canvasLocation" x="36" y="57.571214392803604"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Placeholder" width="60" height="60"/>
+    </resources>
+</document>
