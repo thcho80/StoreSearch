@@ -37,24 +37,84 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        searchResults = [SearchResult]()
-        hasSearched = true
-        
-        if searchBar.text != "1" {
-            for i in 0...2 {
-                let searchResult = SearchResult()
-                searchResult.name = String(format:"Fake Result %d for", i)
-                searchResult.artistName = searchBar.text!
-                searchResults.append(searchResult)
+        if !(searchBar.text!.isEmpty) {
+            searchBar.resignFirstResponder()
+            
+            searchResults = [SearchResult]()
+            hasSearched = true
+            
+            let url = urlWithSearchText(searchText: searchBar.text!)
+            print(url)
+            if let jsonString = performStoreRequestWithUrl(url: url){
+                if let dictionary = parseJSON(jsonString: jsonString){
+//                    print("Dictionary: \(dictionary)")
+                    parseDictionary(dictionary: dictionary)
+                    tableView.reloadData()
+                    return
+                }
             }
+            showNetworkError()
         }
-        
-        tableView.reloadData()
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
+    }
+    
+    func urlWithSearchText(searchText:String)->NSURL {
+        let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        let urlString = String(format: "http://itunes.apple.com/search?term=%@", escapedSearchText)
+        let url = NSURL(string: urlString)
+        return url!
+    }
+    
+    func performStoreRequestWithUrl(url:NSURL)->String? {
+        do {
+            let resultString = try String(contentsOf: url as URL, encoding: String.Encoding.utf8)
+            return resultString
+        } catch {
+            print("Error create resultString \(error)")
+        }
+        return nil
+    }
+    
+    func parseJSON(jsonString:String)->[String:AnyObject]? {
+        if let data = jsonString.data(using: String.Encoding.utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+                return json as? [String : AnyObject]
+            } catch {
+                print("parse JSON error \(error)")
+            }
+        }
+        return nil
+    }
+    
+    func showNetworkError(){
+        let alert = UIAlertController(title: "Whoops.."
+            , message: "There was an error reading from the iTynes Store. Please try again"
+            , preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func parseDictionary(dictionary:[String:AnyObject]) {
+        if let array:AnyObject = dictionary["results"] {
+            for resultDict in array as! [AnyObject] {
+                if let resultDict = resultDict as? [String:AnyObject] {
+                    if let wrapperType = resultDict["wrapperType"] as? NSString {
+                        if let kind = resultDict["kind"] as? NSString {
+                            print("wrapperType: \(wrapperType), kind:\(kind)")
+                        }
+                    }
+                } else {
+                    print("expected a dictionary")
+                }
+            }
+        } else {
+            print("expected 'results' array")
+        }
     }
 }
 
@@ -84,7 +144,6 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if searchResults.count == 0 {
             return tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.nothingFoundCell, for: indexPath)
             
