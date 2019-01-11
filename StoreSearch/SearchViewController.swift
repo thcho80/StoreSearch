@@ -48,7 +48,7 @@ extension SearchViewController: UISearchBarDelegate {
             if let jsonString = performStoreRequestWithUrl(url: url){
                 if let dictionary = parseJSON(jsonString: jsonString){
 //                    print("Dictionary: \(dictionary)")
-                    parseDictionary(dictionary: dictionary)
+                    searchResults = parseDictionary(dictionary: dictionary)
                     tableView.reloadData()
                     return
                 }
@@ -99,14 +99,25 @@ extension SearchViewController: UISearchBarDelegate {
         present(alert, animated: true, completion: nil)
     }
     
-    func parseDictionary(dictionary:[String:AnyObject]) {
+    func parseDictionary(dictionary:[String:AnyObject])->[SearchResult] {
+        var searchResults = [SearchResult]()
+        
         if let array:AnyObject = dictionary["results"] {
             for resultDict in array as! [AnyObject] {
                 if let resultDict = resultDict as? [String:AnyObject] {
+                    var searchResult:SearchResult?
+                    
                     if let wrapperType = resultDict["wrapperType"] as? NSString {
-                        if let kind = resultDict["kind"] as? NSString {
-                            print("wrapperType: \(wrapperType), kind:\(kind)")
+                        switch wrapperType {
+                        case "track":
+                            searchResult = parseTrack(dictionary: resultDict)
+                        default:
+                            break
                         }
+                    }
+                    
+                    if let result = searchResult {
+                        searchResults.append(result)
                     }
                 } else {
                     print("expected a dictionary")
@@ -115,6 +126,26 @@ extension SearchViewController: UISearchBarDelegate {
         } else {
             print("expected 'results' array")
         }
+        return searchResults
+    }
+    
+    func parseTrack(dictionary:[String:AnyObject])->SearchResult {
+        let searchResult = SearchResult()
+        searchResult.name = (dictionary["trackName"] as! NSString) as String
+        searchResult.artistName = (dictionary["artistName"] as! NSString) as String
+        searchResult.artworkURL60 = (dictionary["artworkUrl60"] as! NSString) as String
+        searchResult.artworkURL100 = (dictionary["artworkUrl100"] as! NSString) as String
+        searchResult.storeURL = (dictionary["trackViewUrl"] as! NSString) as String
+        searchResult.kind = (dictionary["kind"] as! NSString) as String
+        searchResult.currency = ((dictionary["currency"] as! NSString) as String)
+        
+        if let price = dictionary["trackPrice"] as? NSNumber {
+            searchResult.price = Double(truncating: price)
+        }
+        if let genre = dictionary["primaryGenreName"] as? NSString {
+            searchResult.genre = genre as String
+        }
+        return searchResult
     }
 }
 
