@@ -44,11 +44,13 @@ extension SearchViewController: UISearchBarDelegate {
             hasSearched = true
             
             let url = urlWithSearchText(searchText: searchBar.text!)
-            print(url)
+            
             if let jsonString = performStoreRequestWithUrl(url: url){
                 if let dictionary = parseJSON(jsonString: jsonString){
-//                    print("Dictionary: \(dictionary)")
                     searchResults = parseDictionary(dictionary: dictionary)
+                    searchResults.sort(by: {result1, result2 in
+                        return result1.name.localizedStandardCompare(result2.name) == ComparisonResult.orderedAscending
+                    })
                     tableView.reloadData()
                     return
                 }
@@ -162,7 +164,7 @@ extension SearchViewController: UISearchBarDelegate {
         searchResult.artistName = (dictionary["artistName"] as! NSString) as String
         searchResult.artworkURL60 = (dictionary["artworkUrl60"] as! NSString) as String
         searchResult.artworkURL100 = (dictionary["artworkUrl100"] as! NSString) as String
-        searchResult.storeURL = (dictionary["collectionUrl"] as! NSString) as String
+        searchResult.storeURL = (dictionary["collectionViewUrl"] as! NSString) as String
         searchResult.kind = "audiobook"
         searchResult.currency = ((dictionary["currency"] as! NSString) as String)
         
@@ -207,8 +209,8 @@ extension SearchViewController: UISearchBarDelegate {
         if let price = dictionary["price"] as? NSNumber {
             searchResult.price = Double(truncating: price)
         }
-        if let genres:AnyObject = dictionary["genres"]{
-            searchResult.genre = ", ".join(genres as [String])
+        if let genres:[String] = dictionary["genres"] as! [String]{
+            searchResult.genre = genres.joined(separator: ",")
         }
         return searchResult
     }
