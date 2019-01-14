@@ -111,8 +111,16 @@ extension SearchViewController: UISearchBarDelegate {
                         switch wrapperType {
                         case "track":
                             searchResult = parseTrack(dictionary: resultDict)
+                        case "audiobook":
+                            searchResult = parseAudioBook(dictionary: resultDict)
+                        case "software":
+                            searchResult = parseSoftware(dictionary: resultDict)
                         default:
                             break
+                        }
+                    } else if let kind = resultDict["kind"] as? NSString {
+                        if kind == "ebook" {
+                            searchResult = parseEBook(dictionary: resultDict)
                         }
                     }
                     
@@ -146,6 +154,79 @@ extension SearchViewController: UISearchBarDelegate {
             searchResult.genre = genre as String
         }
         return searchResult
+    }
+    
+    func parseAudioBook(dictionary:[String:AnyObject])->SearchResult {
+        let searchResult = SearchResult()
+        searchResult.name = (dictionary["collectionName"] as! NSString) as String
+        searchResult.artistName = (dictionary["artistName"] as! NSString) as String
+        searchResult.artworkURL60 = (dictionary["artworkUrl60"] as! NSString) as String
+        searchResult.artworkURL100 = (dictionary["artworkUrl100"] as! NSString) as String
+        searchResult.storeURL = (dictionary["collectionUrl"] as! NSString) as String
+        searchResult.kind = "audiobook"
+        searchResult.currency = ((dictionary["currency"] as! NSString) as String)
+        
+        if let price = dictionary["collectionPrice"] as? NSNumber {
+            searchResult.price = Double(truncating: price)
+        }
+        if let genre = dictionary["primaryGenreName"] as? NSString {
+            searchResult.genre = genre as String
+        }
+        return searchResult
+    }
+    
+    func parseSoftware(dictionary:[String:AnyObject])->SearchResult {
+        let searchResult = SearchResult()
+        searchResult.name = (dictionary["trackName"] as! NSString) as String
+        searchResult.artistName = (dictionary["artistName"] as! NSString) as String
+        searchResult.artworkURL60 = (dictionary["artworkUrl60"] as! NSString) as String
+        searchResult.artworkURL100 = (dictionary["artworkUrl100"] as! NSString) as String
+        searchResult.storeURL = (dictionary["trackViewUrl"] as! NSString) as String
+        searchResult.kind = (dictionary["kind"] as! NSString) as String
+        searchResult.currency = ((dictionary["currency"] as! NSString) as String)
+        
+        if let price = dictionary["price"] as? NSNumber {
+            searchResult.price = Double(truncating: price)
+        }
+        if let genre = dictionary["primaryGenreName"] as? NSString {
+            searchResult.genre = genre as String
+        }
+        return searchResult
+    }
+    
+    func parseEBook(dictionary:[String:AnyObject])->SearchResult {
+        let searchResult = SearchResult()
+        searchResult.name = (dictionary["trackName"] as! NSString) as String
+        searchResult.artistName = (dictionary["artistName"] as! NSString) as String
+        searchResult.artworkURL60 = (dictionary["artworkUrl60"] as! NSString) as String
+        searchResult.artworkURL100 = (dictionary["artworkUrl100"] as! NSString) as String
+        searchResult.storeURL = (dictionary["trackViewUrl"] as! NSString) as String
+        searchResult.kind = (dictionary["kind"] as! NSString) as String
+        searchResult.currency = ((dictionary["currency"] as! NSString) as String)
+        
+        if let price = dictionary["price"] as? NSNumber {
+            searchResult.price = Double(truncating: price)
+        }
+        if let genres:AnyObject = dictionary["genres"]{
+            searchResult.genre = ", ".join(genres as [String])
+        }
+        return searchResult
+    }
+    
+    func kindForDisplay(kind:String)->String {
+        switch kind {
+        case "album" : return "Album"
+        case "audiobook": return "Audio Book"
+        case "book": return "Book"
+        case "ebook": return "E-Book"
+        case "music-video": return "Music Video"
+        case "feature-movie": return "Movie"
+        case "podcast": return "Podcast"
+        case "software": return "App"
+        case "song": return "Song"
+        case "tv-episode": return "TV Episode"
+        default: return kind
+        }
     }
 }
 
@@ -183,9 +264,15 @@ extension SearchViewController: UITableViewDataSource {
             
             let searchResult = searchResults[indexPath.row]
             cell.nameLabel!.text = searchResult.name
-            cell.artistNameLabel!.text = searchResult.artistName
             
+            if searchResult.artistName.isEmpty {
+                cell.artistNameLabel.text = "Unknown"
+            } else {
+                cell.artistNameLabel.text = String(format: "%@ (%@)", searchResult.artistName, kindForDisplay(kind: searchResult.kind))
+            }
             return cell
         }
     }
+    
+    
 }
