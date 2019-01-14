@@ -47,16 +47,6 @@ class SearchViewController: UIViewController {
         return url!
     }
     
-    func performStoreRequestWithUrl(url:NSURL)->String? {
-        do {
-            let resultString = try String(contentsOf: url as URL, encoding: String.Encoding.utf8)
-            return resultString
-        } catch {
-            print("Error create resultString \(error)")
-        }
-        return nil
-    }
-    
     func parseJSON(jsonString:String)->[String:AnyObject]? {
         if let data = jsonString.data(using: String.Encoding.utf8) {
             do {
@@ -219,31 +209,24 @@ extension SearchViewController: UISearchBarDelegate {
             
             searchResults = [SearchResult]()
             hasSearched = true
-
-            let queue = DispatchQueue.global(qos: .default)
+            
             let url = self.urlWithSearchText(searchText: searchBar.text!)
             
-            queue.async {
-                if let jsonString = self.performStoreRequestWithUrl(url: url){
-                    if let dictionary = self.parseJSON(jsonString: jsonString){
-                        self.searchResults = self.parseDictionary(dictionary: dictionary)
-                        self.searchResults.sort(by: {result1, result2 in
-                            return result1.name.localizedStandardCompare(result2.name) == ComparisonResult.orderedAscending
-                        })
-                        
-                        DispatchQueue.main.async {
-                            self.isLoading = false   // indicator spinning stop
-                            self.tableView.reloadData()
-                            print("*** DONE")
-                        }
-                        return
+            let session = URLSession.shared
+            
+            let dataTask = session.dataTask(with: url as URL, completionHandler: {data, response, error in
+                if let error = error {
+                    print("Failure! \(error)")
+                } else if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        print("Success! \(String(describing: data))")
+                    } else {
+                        print("Failure! \(String(describing: response))")
                     }
                 }
-                DispatchQueue.main.async {
-                    print("*** ERROR")
-                    self.showNetworkError()
-                }
-            }
+            })
+            dataTask.resume()
+            
         }
     }
     
