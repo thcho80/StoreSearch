@@ -23,6 +23,7 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
+    var dataTask:URLSessionTask?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +45,7 @@ class SearchViewController: UIViewController {
     // MARK:- Private Methods
     func urlWithSearchText(searchText:String)->NSURL {
         let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let urlString = String(format: "\(iTunesUrl)/search999?term=%@", escapedSearchText)
+        let urlString = String(format: "\(iTunesUrl)/search?term=%@", escapedSearchText)
         let url = NSURL(string: urlString)
         return url!
     }
@@ -214,9 +215,11 @@ extension SearchViewController: UISearchBarDelegate {
             let url = self.urlWithSearchText(searchText: searchBar.text!)
             let session = URLSession.shared
             
-            let dataTask = session.dataTask(with: url as URL, completionHandler: {data, response, error in
+            dataTask?.cancel()
+            
+            dataTask = session.dataTask(with: url as URL, completionHandler: {data, response, error in
                 if let error = error {
-                    print("Failure! \(error)")
+                    print("Failure! \(error)") 
                 } else if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
                         print("Success! \(String(describing: data))")
@@ -242,7 +245,7 @@ extension SearchViewController: UISearchBarDelegate {
                     }
                 }
             })
-            dataTask.resume()
+            dataTask?.resume()
             
         }
     }
