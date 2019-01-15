@@ -18,6 +18,8 @@ class SearchViewController: UIViewController {
         static let loadingCell = "LoadingCell"
     }
     
+    let iTunesUrl = "http://itunes.apple.com"
+    
     var searchResults = [SearchResult]()
     var hasSearched = false
     var isLoading = false
@@ -42,20 +44,19 @@ class SearchViewController: UIViewController {
     // MARK:- Private Methods
     func urlWithSearchText(searchText:String)->NSURL {
         let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let urlString = String(format: "http://itunes.apple.com/search?term=%@", escapedSearchText)
+        let urlString = String(format: "\(iTunesUrl)/search999?term=%@", escapedSearchText)
         let url = NSURL(string: urlString)
         return url!
     }
     
-    func parseJSON(jsonString:String)->[String:AnyObject]? {
-        if let data = jsonString.data(using: String.Encoding.utf8) {
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
-                return json as? [String : AnyObject]
-            } catch {
-                print("parse JSON error \(error)")
-            }
+    func parseJSON(data:NSData)->[String:AnyObject]? {
+        do {
+            let json = try JSONSerialization.jsonObject(with: data as Data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+            return json as? [String : AnyObject]
+        } catch {
+            print("parse JSON error \(error)")
         }
+    
         return nil
     }
     
@@ -211,7 +212,6 @@ extension SearchViewController: UISearchBarDelegate {
             hasSearched = true
             
             let url = self.urlWithSearchText(searchText: searchBar.text!)
-            
             let session = URLSession.shared
             
             let dataTask = session.dataTask(with: url as URL, completionHandler: {data, response, error in
@@ -220,8 +220,25 @@ extension SearchViewController: UISearchBarDelegate {
                 } else if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
                         print("Success! \(String(describing: data))")
+                        if let dictionary = self.parseJSON(data: data! as NSData) {
+                            self.searchResults = self.parseDictionary(dictionary: dictionary)
+                            self.searchResults.sort(by: <)
+                            DispatchQueue.main.async {
+                                self.isLoading = false                  // indicator spinning stop
+                                self.tableView.reloadData()
+                                print("*** DONE")
+                            }
+                            return
+                        }
                     } else {
                         print("Failure! \(String(describing: response))")
+                        DispatchQueue.main.async {
+                            self.hasSearched = false
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                            self.showNetworkError()
+                            print("*** Failure!")
+                        }
                     }
                 }
             })
