@@ -33,12 +33,37 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Xqq-Pe-4T2"/>
                                 </connections>
                             </searchBar>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oMl-e7-rZk">
+                                <rect key="frame" x="0.0" y="76" width="414" height="44"/>
+                                <items>
+                                    <navigationItem id="1iX-yy-jK8">
+                                        <nil key="title"/>
+                                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="OQr-f1-kFg">
+                                            <rect key="frame" x="57" y="7.6666666666666679" width="300" height="29.000000000000004"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="All"/>
+                                                <segment title="Music"/>
+                                                <segment title="Software"/>
+                                                <segment title="E-books"/>
+                                            </segments>
+                                            <connections>
+                                                <action selector="segmentChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="93i-H0-ZRE"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4tv-xT-HLD" firstAttribute="trailing" secondItem="twu-t2-iVP" secondAttribute="trailing" id="1VW-ss-8by"/>
+                            <constraint firstItem="oMl-e7-rZk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="79H-nf-KLk"/>
                             <constraint firstItem="4tv-xT-HLD" firstAttribute="leading" secondItem="twu-t2-iVP" secondAttribute="leading" id="IBj-nG-vmI"/>
                             <constraint firstItem="twu-t2-iVP" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="KyH-oM-67e"/>
+                            <constraint firstItem="oMl-e7-rZk" firstAttribute="top" secondItem="4tv-xT-HLD" secondAttribute="bottom" id="M3b-zC-93g"/>
+                            <constraint firstItem="oMl-e7-rZk" firstAttribute="top" secondItem="4tv-xT-HLD" secondAttribute="bottom" id="PfA-hH-A37"/>
+                            <constraint firstItem="oMl-e7-rZk" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Tlv-bn-dDI"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="twu-t2-iVP" secondAttribute="trailing" id="Vix-6f-25N"/>
                             <constraint firstItem="twu-t2-iVP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="nqt-CD-NLC"/>
                             <constraint firstItem="4tv-xT-HLD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="qKN-fb-aiD"/>
@@ -48,6 +73,7 @@
                     </view>
                     <connections>
                         <outlet property="searchBar" destination="4tv-xT-HLD" id="9XL-3x-Wxp"/>
+                        <outlet property="segmentControl" destination="OQr-f1-kFg" id="ZLg-Gy-jcB"/>
                         <outlet property="tableView" destination="twu-t2-iVP" id="K8F-Yz-9RA"/>
                     </connections>
                 </viewController>
