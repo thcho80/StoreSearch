@@ -75,11 +75,55 @@
                         <outlet property="searchBar" destination="4tv-xT-HLD" id="9XL-3x-Wxp"/>
                         <outlet property="segmentControl" destination="OQr-f1-kFg" id="ZLg-Gy-jcB"/>
                         <outlet property="tableView" destination="twu-t2-iVP" id="K8F-Yz-9RA"/>
+                        <segue destination="Ygh-Nc-OoC" kind="presentation" identifier="ShowDetail" id="dV6-i8-v6t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="47.826086956521742" y="24.456521739130437"/>
+            <point key="canvasLocation" x="57" y="24"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="Kaj-qx-PVS">
+            <objects>
+                <viewController id="Ygh-Nc-OoC" customClass="DetailViewController" customModule="StoreSearch" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pOy-CR-EOe">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TzS-x9-EGl" userLabel="Pop-up View">
+                                <rect key="frame" x="87" y="238" width="240" height="260"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e8O-iH-IE5">
+                                        <rect key="frame" x="3" y="0.0" width="15" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration" label="Close Button"/>
+                                        <state key="normal" image="CloseButton"/>
+                                        <connections>
+                                            <action selector="close:" destination="Ygh-Nc-OoC" eventType="touchUpInside" id="5N0-my-pFk"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="RBe-yB-GUG"/>
+                                    <constraint firstAttribute="height" constant="260" id="XU6-8E-G7R"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TzS-x9-EGl" firstAttribute="centerY" secondItem="pOy-CR-EOe" secondAttribute="centerY" id="2FW-co-bdd"/>
+                            <constraint firstItem="TzS-x9-EGl" firstAttribute="centerX" secondItem="pOy-CR-EOe" secondAttribute="centerX" id="DKU-Hl-P3f"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="NOS-Io-Kn8"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yOA-Zw-JyZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1062" y="24"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="CloseButton" width="15" height="15"/>
+    </resources>
 </document>
