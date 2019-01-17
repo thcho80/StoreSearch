@@ -141,13 +141,19 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yfe-Kc-PWq">
-                                        <rect key="frame" x="176" y="212" width="60" height="24"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yfe-Kc-PWq">
+                                        <rect key="frame" x="188" y="210" width="46" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="53l-0H-NEH"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="PBC-nm-LIT"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="$9.99" backgroundImage="PriceButton">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="openInStore" destination="Ygh-Nc-OoC" eventType="touchUpInside" id="qu1-Os-Mwl"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Genre Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8x-UG-tQf">
                                         <rect key="frame" x="70" y="190" width="160" height="21"/>
@@ -159,8 +165,11 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Yfe-Kc-PWq" secondAttribute="bottom" constant="6" id="2E4-OO-Udx"/>
+                                    <constraint firstAttribute="trailing" secondItem="Yfe-Kc-PWq" secondAttribute="trailing" constant="6" id="Q6H-27-Wxc"/>
                                     <constraint firstAttribute="width" constant="240" id="RBe-yB-GUG"/>
                                     <constraint firstAttribute="height" constant="240" id="XU6-8E-G7R"/>
+                                    <constraint firstAttribute="trailing" secondItem="Yfe-Kc-PWq" secondAttribute="trailing" constant="6" id="mKb-wm-Poe"/>
                                 </constraints>
                             </view>
                         </subviews>
