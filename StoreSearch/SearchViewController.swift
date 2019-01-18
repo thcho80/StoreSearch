@@ -26,6 +26,7 @@ class SearchViewController: UIViewController {
     var hasSearched = false
     var isLoading = false
     var dataTask:URLSessionTask?
+    var landscapeViewController:LandscapeViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,58 @@ class SearchViewController: UIViewController {
     }
     
     // MARK:- Private Methods
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        
+        switch newCollection.verticalSizeClass {
+        case .compact:
+            showLandscapeViewWithCoordinator(coordinator)
+        case .regular, .unspecified:
+            hideLandscapeViewWithCoordinator(coordinator)
+        }
+    }
+    
+    func showLandscapeViewWithCoordinator(_ coordinator:UIViewControllerTransitionCoordinator) {
+        precondition(landscapeViewController == nil, "LandscapeViewController is nil")
+        
+        landscapeViewController = (storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as! LandscapeViewController)
+        
+        if let controller = landscapeViewController {
+            controller.view.frame = view.bounds
+            controller.view.alpha = 0
+            
+            view.addSubview(controller.view)
+            addChild(controller)
+            
+            coordinator.animate(alongsideTransition: {_ in
+                controller.view.alpha = 1
+                self.searchBar.resignFirstResponder()
+                
+                if self.presentedViewController != nil {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }, completion: {_ in
+                controller.didMove(toParent: self)
+            })
+        }
+    }
+    
+    func hideLandscapeViewWithCoordinator(_ coordinator:UIViewControllerTransitionCoordinator) {
+        precondition(landscapeViewController != nil, "landscapeViewController is not nil")
+        
+        if let controller = landscapeViewController {
+            
+            coordinator.animate(alongsideTransition: {_ in
+                controller.view.alpha = 0
+            }, completion: {_ in
+                controller.willMove(toParent: nil)
+                controller.view.removeFromSuperview()
+                controller.removeFromParent()
+                self.landscapeViewController = nil
+            })
+        }
+    }
     
     @IBAction func segmentChange(_ sender: UISegmentedControl) {
         print("Segment Change: \(sender.selectedSegmentIndex)")
