@@ -3,25 +3,47 @@ import Foundation
 class Search {
     let iTunesUrl = "http://itunes.apple.com"
     
-    var searchResults = [SearchResult]()
-    var hasSearched = false
-    var isLoading = false
+//    var searchResults = [SearchResult]()
+//    var hasSearched = false
+//    var isLoading = false
     
     private var dataTask:URLSessionDataTask? = nil
     
     typealias SearchComplete = (Bool)->Void
     
-    func performSearchForText(text:String, category:Int, completion:@escaping SearchComplete){
+    enum Category:Int {
+        case all = 0
+        case music = 1
+        case software = 2
+        case ebook = 3
+        
+        var entityName:String {
+            switch self {
+            case .all: return ""
+            case .music: return "musicTrack"
+            case .software: return "software"
+            case .ebook: return "ebook"
+            }
+        }
+    }
+    
+    enum State {
+        case notSearchYet
+        case loading
+        case noResults
+        case results([SearchResult])
+    }
+    
+    private(set) var state:State = .notSearchYet
+    
+    func performSearchForText(text:String, category:Category, completion:@escaping SearchComplete){
         if !text.isEmpty {
             dataTask?.cancel()
-            
-            isLoading = true
-            hasSearched = true
-            searchResults = [SearchResult]()
-            
+            state = .loading
             let url = urlWithSearchText(searchText: text, category: category)
             let session = URLSession.shared
             dataTask = session.dataTask(with: url, completionHandler: { data, response, error in
+                self.state = .notSearchYet
                 var success = false
                
                 if let error = error {
@@ -30,23 +52,18 @@ class Search {
                 } else if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
                         if let dictionary = self.parseJSON(data: data! as NSData){
-                            self.searchResults = self.parseDictionary(dictionary: dictionary)
-                            self.searchResults.sort(by: <)
-                            print("Success!")
-                            self.isLoading = false
+                            var searchResults = self.parseDictionary(dictionary: dictionary)
+                            if searchResults.isEmpty {
+                                self.state = .noResults
+                            } else {
+                                searchResults.sort(by: <)
+                                self.state = .results(searchResults)
+                            }
                             success = true
                         }
                     }
                 }
-                
-                if !success {
-                    self.hasSearched = false
-                    self.isLoading = false
-                }
-                
-Utils.isMainThread()
                 DispatchQueue.main.async {
-Utils.isMainThread()
                     completion(success)
                 }
 
@@ -55,15 +72,8 @@ Utils.isMainThread()
         }
     }
     
-    private func urlWithSearchText(searchText:String, category:Int)->URL {
-        var entityName:String
-        switch category {
-        case 1: entityName = "musicTrack"
-        case 2: entityName = "software"
-        case 3: entityName = "ebook"
-        default : entityName = ""
-        }
-        
+    private func urlWithSearchText(searchText:String, category:Category)->URL {
+        let entityName:String = category.entityName
         let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let urlString = String(format: "\(iTunesUrl)/search?term=%@&limit=200&entity=%@", escapedSearchText, entityName)
         let url = URL(string: urlString)
