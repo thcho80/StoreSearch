@@ -62,8 +62,10 @@ class LandscapeViewController: UIViewController {
             case .notSearchYet:
                 break
             case .loading:
+                showSpinner()
                 break
             case .noResults:
+                showNothingFoundLabel()
                 break
             case .results(let list):
                 tileButtons(searchResults: list)
@@ -147,6 +149,23 @@ class LandscapeViewController: UIViewController {
         
     }
     
+    private func showNothingFoundLabel(){
+        let label = UILabel(frame: CGRect.zero)
+        label.text = "Nothing Found"
+        label.backgroundColor = UIColor.clear
+        label.textColor = UIColor.white
+        
+        label.sizeToFit()
+        
+        var rect = label.frame
+        rect.size.width = ceil(rect.size.width / 2) * 2
+        rect.size.height = ceil(rect.size.height / 2) * 2
+        label.frame = rect
+        label.center = CGPoint(x: scrollView.bounds.midX, y: scrollView.bounds.midY)
+        
+        view.addSubview(label)
+    }
+    
     private func downloadImageForSearchResult(searchResult:SearchResult, andPlaceOnButton button:UIButton) {
         
         if let url = URL(string: searchResult.artworkURL60){
@@ -171,6 +190,32 @@ class LandscapeViewController: UIViewController {
             downloadTask.resume()
             downloadTasks.append(downloadTask)
         }
+    }
+    
+    func searchResultsReceived(){
+        hideSpinner()
+        
+        switch search.state {
+        case .notSearchYet, .loading:
+            break
+        case .noResults:
+            showNothingFoundLabel()
+        case .results(let list):
+            tileButtons(searchResults: list)            
+        }
+    }
+    
+    private func showSpinner() {
+        let spinner = UIActivityIndicatorView(style: .white)
+        spinner.center = CGPoint(x: scrollView.bounds.midX + 0.5, y: scrollView.bounds.midY + 0.5)
+        spinner.tag = 1000
+        
+        view.addSubview(spinner)
+        spinner.startAnimating()
+    }
+    
+    private func hideSpinner(){
+        view.viewWithTag(1000)?.removeFromSuperview()
     }
 
 }

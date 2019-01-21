@@ -1,12 +1,9 @@
 import Foundation
+import UIKit
 
 class Search {
     let iTunesUrl = "http://itunes.apple.com"
-    
-//    var searchResults = [SearchResult]()
-//    var hasSearched = false
-//    var isLoading = false
-    
+   
     private var dataTask:URLSessionDataTask? = nil
     
     typealias SearchComplete = (Bool)->Void
@@ -39,6 +36,8 @@ class Search {
     func performSearchForText(text:String, category:Category, completion:@escaping SearchComplete){
         if !text.isEmpty {
             dataTask?.cancel()
+            
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             state = .loading
             let url = urlWithSearchText(searchText: text, category: category)
             let session = URLSession.shared
@@ -64,6 +63,7 @@ class Search {
                     }
                 }
                 DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     completion(success)
                 }
 
