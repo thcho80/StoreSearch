@@ -1,0 +1,39 @@
+
+/* Class = "UISearchBar"; placeholder = "App name, artist, song, album, e-book"; ObjectID = "4tv-xT-HLD"; */
+"4tv-xT-HLD.placeholder" = "앱, 아티스트, 노래, 앨범, 전자책";
+
+/* Class = "UILabel"; text = "Kind Value"; ObjectID = "Iaq-pn-iVz"; */
+"Iaq-pn-iVz.text" = "Kind Value";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "LMl-uZ-ip5"; */
+"LMl-uZ-ip5.text" = "Name";
+
+/* Class = "UISegmentedControl"; OQr-f1-kFg.segmentTitles[0] = "All"; ObjectID = "OQr-f1-kFg"; */
+"OQr-f1-kFg.segmentTitles[0]" = "전체";
+
+/* Class = "UISegmentedControl"; OQr-f1-kFg.segmentTitles[1] = "Music"; ObjectID = "OQr-f1-kFg"; */
+"OQr-f1-kFg.segmentTitles[1]" = "음악";
+
+/* Class = "UISegmentedControl"; OQr-f1-kFg.segmentTitles[2] = "Software"; ObjectID = "OQr-f1-kFg"; */
+"OQr-f1-kFg.segmentTitles[2]" = "앱";
+
+/* Class = "UISegmentedControl"; OQr-f1-kFg.segmentTitles[3] = "E-books"; ObjectID = "OQr-f1-kFg"; */
+"OQr-f1-kFg.segmentTitles[3]" = "전자책";
+
+/* Class = "UILabel"; text = "Genre Label"; ObjectID = "P8x-UG-tQf"; */
+"P8x-UG-tQf.text" = "Genre Label";
+
+/* Class = "UIButton"; normalTitle = "$9.99"; ObjectID = "Yfe-Kc-PWq"; */
+"Yfe-Kc-PWq.normalTitle" = "$9.99";
+
+/* Class = "UILabel"; text = "Genre"; ObjectID = "cze-6P-NW8"; */
+"cze-6P-NW8.text" = "장르:";
+
+/* Class = "UIButton"; accessibilityLabel = "Close Button"; ObjectID = "e8O-iH-IE5"; */
+"e8O-iH-IE5.accessibilityLabel" = "Close Button";
+
+/* Class = "UILabel"; text = "Type"; ObjectID = "fiC-JI-gbS"; */
+"fiC-JI-gbS.text" = "분류:";
+
+/* Class = "UILabel"; text = "Artist Name"; ObjectID = "zRu-B8-iTc"; */
+"zRu-B8-iTc.text" = "Artist Name";
