@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  StoreSearch
+
+  Created by human on 2019. 1. 22..
+  Copyright © 2019년 com.humantrion. All rights reserved.
+*/
+
+
+CFBundleDisplayName = "아이튠즈검색";

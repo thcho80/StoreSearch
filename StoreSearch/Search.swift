@@ -73,11 +73,23 @@ class Search {
     }
     
     private func urlWithSearchText(searchText:String, category:Category)->URL {
-        let entityName:String = category.entityName
-        let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        let urlString = String(format: "\(iTunesUrl)/search?term=%@&limit=200&entity=%@", escapedSearchText, entityName)
+      
+        let locale = Locale.autoupdatingCurrent
+//        let lang = locale.localizedString(forIdentifier: locale.identifier)!
+        let countryCode = locale.regionCode ?? "en_US"
+        let kind = category.entityName
+        let encodedText = searchText.addingPercentEncoding(
+            withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        
+        let urlString = "https://itunes.apple.com/search?" +
+                        "term=\(encodedText)&limit=200&entity=\(kind)" +
+                        "&country=\(countryCode)"
+//                        + "&lang=\(lang)"
+        
         let url = URL(string: urlString)
+        print("URL: \(url!)")
         return url!
+        
     }
     
     private func parseJSON(data:NSData)->[String:AnyObject]? {
