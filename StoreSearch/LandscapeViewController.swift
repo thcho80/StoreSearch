@@ -18,7 +18,7 @@ class LandscapeViewController: UIViewController {
     private var firstTime = true
     private var downloadTasks = [URLSessionDownloadTask]()
     deinit {
-        print("Denit \(self)")
+        print("DeInit \(self)")
         
         for task in downloadTasks {
             task.cancel()
@@ -114,12 +114,13 @@ class LandscapeViewController: UIViewController {
         var column = 0
         var x = marginX
         
-        for(_, searchResult) in searchResults.enumerated() {
+        for(index, searchResult) in searchResults.enumerated() {
             let button = UIButton.init(type: .custom)
             button.setBackgroundImage(UIImage(named: "LandscapeButton"), for: .normal)
             downloadImageForSearchResult(searchResult: searchResult, andPlaceOnButton: button)
             button.frame = CGRect(x: x+paddingHorz, y: marginY + CGFloat(row)*itemHeight + paddingVert, width: buttonWidth, height: buttonHeight)
-            
+            button.tag = 2000 + index
+            button.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
             scrollView.addSubview(button)
             
             row += 1
@@ -147,6 +148,10 @@ class LandscapeViewController: UIViewController {
         pageControl.numberOfPages = numPages
         pageControl.currentPage = 0
         
+    }
+    
+    @objc private func buttonPressed(sender:UIButton){
+        performSegue(withIdentifier: "ShowDetail", sender: sender)
     }
     
     private func showNothingFoundLabel(){
@@ -216,6 +221,24 @@ class LandscapeViewController: UIViewController {
     
     private func hideSpinner(){
         view.viewWithTag(1000)?.removeFromSuperview()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail" {
+            switch search.state{
+            case .results(let list):
+                let detailViewController = segue.destination as! DetailViewController
+                let button = sender as! UIButton
+                let searchResult = list[button.tag - 2000]
+                detailViewController.searchResult = searchResult
+            case .notSearchYet:
+                return
+            case .loading:
+                return
+            case .noResults:
+                return
+            }
+        }
     }
 
 }

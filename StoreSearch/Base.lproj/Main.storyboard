@@ -111,11 +111,12 @@
                     <connections>
                         <outlet property="pageControl" destination="Waz-1u-vTe" id="syM-By-X2o"/>
                         <outlet property="scrollView" destination="jei-uI-W31" id="JM0-ov-Q9S"/>
+                        <segue destination="Ygh-Nc-OoC" kind="presentation" identifier="ShowDetail" id="VU1-6X-HDx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBX-yA-fvp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="56.521739130434788" y="727.98913043478262"/>
+            <point key="canvasLocation" x="57" y="709"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="Kaj-qx-PVS">
@@ -243,11 +244,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yOA-Zw-JyZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1060.8695652173915" y="23.64130434782609"/>
+            <point key="canvasLocation" x="1390" y="348"/>
         </scene>
     </scenes>
     <resources>
         <image name="CloseButton" width="15" height="15"/>
         <image name="PriceButton" width="11" height="24"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="VU1-6X-HDx"/>
+    </inferredMetricsTieBreakers>
 </document>
